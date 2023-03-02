@@ -28,6 +28,12 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 startForeground(1000,createNot());
+        try {
+            Thread.sleep(3000);
+            stopSelf();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return START_NOT_STICKY;
     }
 
@@ -36,13 +42,15 @@ startForeground(1000,createNot());
 return null;
     }
 
-    public Notification createNot(){
+    private Notification createNot(){
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager==null)
             return null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("app","app",NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(notificationChannel);
+
         }
 
         return new NotificationCompat.Builder(this,"app")
